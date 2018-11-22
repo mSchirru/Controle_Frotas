@@ -41,7 +41,7 @@ def main():
 
 
         else:
-            print("I don't understand your choice.")
+            print("Escolha uma opção viavel")
 
 def menu_pontoEntrega():
     choice = '-'
