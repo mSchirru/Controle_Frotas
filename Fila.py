@@ -11,4 +11,16 @@ class Queue(object):
         self.queue.pop()
 
     def printQueue(self):
+        y = []
+        for x in self.queue:
+            y.append(x.nome)
+        return y
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def size(self):
+        return len(self.queue)
+
+    def return_queue(self):
         return self.queue

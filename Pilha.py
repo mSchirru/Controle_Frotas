@@ -15,7 +15,10 @@ class Stack(object):
             return self.stack.pop()
 
     def printStack(self):
-        return self.stack
+        y = []
+        for x in self.stack:
+            y.append(x.nome)
+        return y
 
     def size(self):
         return len(self.stack)

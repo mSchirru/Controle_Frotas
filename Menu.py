@@ -1,9 +1,6 @@
 import ItemEntrega
 import Local
 import Caminhao
-import Pilha
-import Fila
-
 
 itens = []
 locais = []
@@ -12,19 +9,22 @@ caminhoes = []
 def main():
     choice = '-'
     while choice != '0':
-        print("\n **************************")
-        print("MENU")
-        print("[1] Pontos de Entrega")
-        print("[2] Itens de Entrega")
-        print("[3] Caminhões")
-        print("[4] Associar item a ponto de entrega")
-        print("[5] Associar ponto de entrega a caminhão")
-        print("[6] Realizar entregas")
-        print("[0] Sair")
+        print("\n\n************ MENU **************")
+        print("*[1] Pontos de Entrega")
+        print("*[2] Itens de Entrega")
+        print("*[3] Caminhões")
+        print("*[4] Associar item a ponto de entrega")
+        print("*[5] Associar ponto de entrega a caminhão")
+        print("*[6] Realizar entregas")
+        print("*[0] Sair")
+        print("*********************************** \n")
 
-        choice = input ("Please make a choice: ")
+        choice = input ("Insira sua escolha: ")
 
-        if choice == "5":
+        if choice == "6":
+            realizar_entregas()
+
+        elif choice == "5":
             associar_local_caminhao()
 
         elif choice == "4":
@@ -39,6 +39,9 @@ def main():
         elif choice == "1":
             menu_pontoEntrega()
 
+        elif choice == "0":
+            print("Até a próxima.")
+
 
         else:
             print("Escolha uma opção viavel")
@@ -46,12 +49,14 @@ def main():
 def menu_pontoEntrega():
     choice = '-'
     while choice != '0':
+        print("\n\n************ SUBMENU **************")
         print("[1] Inserir ponto de entrega")
         print("[2] Remover pontos de entrega")
         print("[3] Verificar os dados de um ponto")
         print("[0] Sair")
+        print("*********************************** \n")
 
-        choice = input("Please make a choice: ")
+        choice = input("Insira sua escolha: ")
 
         if choice == "1":
             novo_local = Local.criar_local()
@@ -100,12 +105,14 @@ def menu_pontoEntrega():
 def menu_ItensEntrega():
     choice = '-'
     while choice != '0':
+        print("\n\n************ SUBMENU **************")
         print("[1] Inserir item de entrega")
         print("[2] Remover item de entrega")
         print("[3] Verificar os itens de entrega")
         print("[0] Sair")
+        print("*********************************** \n")
 
-        choice = input("Please make a choice: ")
+        choice = input("Insira sua escolha: ")
 
         if choice == "1":
             novo_item = ItemEntrega.criar_item()
@@ -142,12 +149,14 @@ def menu_ItensEntrega():
 def menu_Caminhoes():
     choice = '-'
     while choice != '0':
+        print("\n\n************ SUBMENU **************")
         print("[1] Inserir caminhão")
         print("[2] Remover caminhão")
         print("[3] Verificar detalhes de um caminhão")
         print("[0] Sair")
+        print("*********************************** \n")
 
-        choice = input("Please make a choice: ")
+        choice = input("Insira sua escolha: ")
 
         if choice == "1":
             novo_caminhao = Caminhao.criar_caminhao()
@@ -183,16 +192,13 @@ def menu_Caminhoes():
 
             index_detalhes = int(input("Insira o numero do caminhão a ser detalhado: "))
 
-            if len(caminhoes[index_detalhes].conjuntoItens) == 0 and len(caminhoes[index_detalhes].conjuntoLocais) == 0:
+            if caminhoes[index_detalhes].conjuntoLocais.is_empty():
                 print("Placa: {} | {}".format(caminhoes[index_detalhes].placa, "Fora de circulação"))
             else:
-                print("Placa: {} | Locais: {} {}".format(caminhoes[index_detalhes].placa,
-                                                                          [local.nome for local in caminhoes[index_detalhes].conjuntoLocais],
-                                                         [[item.nome for item in local.itens1] for local in
-                                                          caminhoes[index_detalhes].conjuntoLocais]))
+                print("Placa: {} \nLocais: {} \nItens: {}".format(caminhoes[index_detalhes].placa,caminhoes[index_detalhes].conjuntoLocais.printQueue(),caminhoes[index_detalhes].conjuntoItens.printStack()))
 
 def associar_item_ptentrega():
-    print("---------- Lista de Locais: ----------")
+    print("\n\n---------- Lista de Locais: ----------")
     aux = 0
     for local in locais:
         print("| [{}] Local: {} | Identificador: {} |".format(aux, local.nome, local.identificador))
@@ -201,7 +207,7 @@ def associar_item_ptentrega():
 
     escolha_local = int(input("Selecione primeiramente o local de entrega: "))
 
-    print("---------- Lista de Itens: ----------")
+    print("\n\n---------- Lista de Itens: ----------")
     aux = 0
     for item in itens:
         print("| [{}] Item: {} | Identificador: {} |".format(aux, item.nome, item.identificador))
@@ -212,8 +218,8 @@ def associar_item_ptentrega():
     while choice != '1':
         escolha_item = int(input("Selecione o item de entrega: "))
         locais[escolha_local].itens.append(itens[escolha_item])
-        print("Item: {} adicionado ao Local: {}".format(itens[escolha_item].nome, locais[escolha_local].nome))
-        choice = input("[0] Adicionar novo item | [1] Sair")
+        print("\nItem: {} adicionado ao Local: {}".format(itens[escolha_item].nome, locais[escolha_local].nome))
+        choice = input("\n[0] Adicionar novo item | [1] Sair")
 
 def associar_local_caminhao():
     print("---------- Lista de Caminhões: ----------")
@@ -234,12 +240,36 @@ def associar_local_caminhao():
 
     choice = '-'
     while choice != '1':
-        escolha_local = int(input("Selecione o local de entrega: "))
-        caminhoes[escolha_caminhao].conjuntoLocais.append(locais[escolha_local])
+        escolha_local = int(input("Selecione o local por ordem de entrega: "))
+
+        caminhoes[escolha_caminhao].conjuntoLocais.enqueue(locais[escolha_local])
+
+
         print("Local: {} adicionado ao Caminhao: {}".format(locais[escolha_local].nome,
                                                             caminhoes[escolha_caminhao].placa))
 
-        choice = input("[0] Adicionar novo item | [1] Sair")
+        flag = input("[0] Adicionar novo item | [1] Sair")
+        if flag == '1':
+            aux = 1
+            for local in caminhoes[escolha_caminhao].conjuntoLocais.return_queue():
+                for item in local.itens:
+                    caminhoes[escolha_caminhao].conjuntoItens.push(item)
+            choice = '1'
+        else:
+            choice = '0'
+
+def realizar_entregas():
+    for caminhao in caminhoes:
+        locais = 0
+        itens = 0
+        print("\nPercurso do caminhão: {}".format(caminhao.placa))
+        for local in caminhao.conjuntoLocais.return_queue():
+            print("\nVisitado o local: {}. Foram entregues os seguintes itens:".format(local.nome))
+            locais += 1
+            for item in local.itens:
+                itens += 1
+                print(item.nome)
+        print("\nTotal de pontos de entrega: {} \nTotal de itens entregues: {}".format(locais, itens))
 
 
 
